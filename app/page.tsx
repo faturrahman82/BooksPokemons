@@ -1,8 +1,12 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
-import { fetchPokemons, Pokemon } from "./lib/api";
+import { useState, useMemo, useEffect } from "react";
+import {
+  fetchPokemons,
+  fetchAllPokemonsInBackground,
+  Pokemon,
+} from "./lib/api";
 import PokemonCard from "./components/PokemonCard";
 import FilterBar from "./components/FilterBar";
 import SkeletonCard from "./components/SkeletonCard";
@@ -12,9 +16,8 @@ export default function HomePage() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
       queryKey: ["pokemons"],
-      queryFn: ({ pageParam = 0 }: { pageParam?: number }) =>
-        fetchPokemons(pageParam, 20),
-      getNextPageParam: (_lastPage, allPages) => allPages.length, // page++
+      queryFn: ({ pageParam = 0 }) => fetchPokemons(Number(pageParam), 20),
+      getNextPageParam: (_last, allPages) => allPages.length,
       initialPageParam: 0,
     });
 
@@ -22,10 +25,21 @@ export default function HomePage() {
   const [searchName, setSearchName] = useState("");
   const [evolutionFilter, setEvolutionFilter] = useState("all");
 
-  const pokemons = data?.pages.flat() ?? [];
+  const [allData, setAllData] = useState<Pokemon[] | null>(null);
+  const [isFullLoading, setIsFullLoading] = useState(true);
 
+  // Fetch all in background once
+  useEffect(() => {
+    fetchAllPokemonsInBackground()
+      .then((res) => setAllData(res))
+      .finally(() => setIsFullLoading(false));
+  }, []);
+
+  // Use full data for filter, if available
   const filteredPokemons = useMemo(() => {
-    return pokemons.filter((p) => {
+    const source = allData ?? data?.pages.flat() ?? [];
+
+    return source.filter((p) => {
       const matchType =
         selectedType === "all" || p.types.includes(selectedType);
       const matchName = p.name.toLowerCase().includes(searchName);
@@ -33,7 +47,7 @@ export default function HomePage() {
         evolutionFilter === "all" || p.evolutionStage === evolutionFilter;
       return matchType && matchName && matchEvolution;
     });
-  }, [pokemons, selectedType, searchName, evolutionFilter]);
+  }, [data, allData, selectedType, searchName, evolutionFilter]);
 
   const handleResetFilter = () => {
     setSelectedType("all");
@@ -65,7 +79,7 @@ export default function HomePage() {
           onReset={handleResetFilter}
         />
 
-        {isLoading ? (
+        {isLoading || (allData === null && isFullLoading) ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <SkeletonCard key={i} />
@@ -100,7 +114,7 @@ export default function HomePage() {
               ))}
             </div>
 
-            {hasNextPage && (
+            {!allData && hasNextPage && (
               <div className="text-center mt-6">
                 <button
                   onClick={() => fetchNextPage()}

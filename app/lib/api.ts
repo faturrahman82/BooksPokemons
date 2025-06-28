@@ -17,6 +17,36 @@ export interface Pokemon {
   evolutionStage: 'basic' | 'middle' | 'final';
 }
 
+export async function fetchAllPokemonsInBackground(): Promise<Pokemon[]> {
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1025`);
+  const data = await res.json();
+
+  const detailed = await Promise.all(
+    data.results.map(async (pokemon: any) => {
+      const detail = await fetch(pokemon.url).then((res) => res.json());
+      return {
+        name: detail.name,
+        image: detail.sprites.other["official-artwork"].front_default,
+        types: detail.types.map((t: any) => t.type.name),
+        hp: detail.stats[0].base_stat,
+        evolutionStage: detail.id <= 151 ? 'basic' : 'advanced', // contoh dummy
+        weakness: 'fire', // dummy
+        resistance: 'water',
+        retreat: '1',
+        attacks: detail.moves.slice(0, 2).map((m: any) => ({
+          name: m.move.name,
+          description: '',
+          damage: Math.floor(Math.random() * 100),
+          category: 'physical',
+        })),
+      };
+    })
+  );
+
+  return detailed;
+}
+
+
 export async function fetchPokemons(page = 0, limit = 20): Promise<Pokemon[]> {
   const offset = page * limit;
 
