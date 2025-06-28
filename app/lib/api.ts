@@ -17,8 +17,10 @@ export interface Pokemon {
   evolutionStage: 'basic' | 'middle' | 'final';
 }
 
-export async function fetchAllPokemons(): Promise<Pokemon[]> {
-  const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1025');
+export async function fetchPokemons(page = 0, limit = 20): Promise<Pokemon[]> {
+  const offset = page * limit;
+
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
   const data = await res.json();
 
   const results: Pokemon[] = await Promise.all(
@@ -34,7 +36,8 @@ export async function fetchAllPokemons(): Promise<Pokemon[]> {
           const moveRes = await fetch(moveObj.move.url).then((res) => res.json());
           return {
             name: moveRes.name,
-            description: moveRes.effect_entries?.find((e: any) => e.language.name === 'en')?.short_effect || 'No description',
+            description:
+              moveRes.effect_entries?.find((e: any) => e.language.name === 'en')?.short_effect || 'No description',
             damage: moveRes.power !== null ? `${moveRes.power}` : '—',
             category: moveRes.damage_class?.name || 'unknown',
           };
@@ -57,6 +60,7 @@ export async function fetchAllPokemons(): Promise<Pokemon[]> {
 
   return results;
 }
+
 
 function getEvolutionStage(name: string, chain: any): 'basic' | 'middle' | 'final' {
   const flatChain = flattenEvolutionChain(chain);

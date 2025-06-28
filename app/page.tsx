@@ -1,22 +1,28 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
-import { fetchAllPokemons, Pokemon } from "./lib/api";
+import { fetchPokemons, Pokemon } from "./lib/api";
 import PokemonCard from "./components/PokemonCard";
 import FilterBar from "./components/FilterBar";
 import SkeletonCard from "./components/SkeletonCard";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 
 export default function HomePage() {
-  const { data: pokemons = [], isLoading } = useQuery<Pokemon[]>({
-    queryKey: ["pokemons"],
-    queryFn: fetchAllPokemons,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["pokemons"],
+      queryFn: ({ pageParam = 0 }: { pageParam?: number }) =>
+        fetchPokemons(pageParam, 20),
+      getNextPageParam: (_lastPage, allPages) => allPages.length, // page++
+      initialPageParam: 0,
+    });
 
   const [selectedType, setSelectedType] = useState("all");
   const [searchName, setSearchName] = useState("");
   const [evolutionFilter, setEvolutionFilter] = useState("all");
+
+  const pokemons = data?.pages.flat() ?? [];
 
   const filteredPokemons = useMemo(() => {
     return pokemons.filter((p) => {
@@ -87,11 +93,25 @@ export default function HomePage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-            {filteredPokemons.map((p) => (
-              <PokemonCard key={p.name} pokemon={p} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+              {filteredPokemons.map((p) => (
+                <PokemonCard key={p.name} pokemon={p} />
+              ))}
+            </div>
+
+            {hasNextPage && (
+              <div className="text-center mt-6">
+                <button
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                  className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded"
+                >
+                  {isFetchingNextPage ? "Loading more..." : "Load More"}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </main>
       <ScrollToTopButton />
