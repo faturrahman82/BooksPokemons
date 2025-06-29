@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Pokémon Explorer',
   description: 'Cari dan jelajahi Pokémon favoritmu dengan tampilan interaktif dan modern!',
   keywords: ['pokemon', 'pokedex', 'nextjs', 'pokeapi', 'tanstack', 'frontend test'],
+    icons: {
+    icon: '/favicon.png', // <- ini menunjuk favicon baru
+  },
 };
 
 
