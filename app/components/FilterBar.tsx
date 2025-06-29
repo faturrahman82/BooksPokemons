@@ -44,18 +44,18 @@ export default function FilterBar({
   onReset,
 }: Props) {
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center mb-6">
+    <div className="flex flex-col gap-3 sm:gap-4 md:gap-5 lg:flex-row lg:items-center mb-4 sm:mb-6 lg:mb-8">
       <input
         type="text"
         placeholder="Cari nama Pokémon..."
         value={nameFilter}
         onChange={(e) => onNameChange(e.target.value.toLowerCase())}
-        className="w-full sm:w-1/3 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 placeholder:text-black text-sm text-gray-800"
+        className="w-full md:w-full lg:w-1/3 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 placeholder:text-gray-500 text-xs sm:text-sm md:text-base text-gray-800"
       />
       <select
         value={typeFilter}
         onChange={(e) => onTypeChange(e.target.value)}
-        className="w-full sm:w-1/3 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-sm text-gray-800 "
+        className="w-full md:w-full lg:w-1/3 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-xs sm:text-sm md:text-base text-gray-800"
       >
         {POKEMON_TYPES.map((type) => (
           <option key={type} value={type}>
@@ -66,7 +66,7 @@ export default function FilterBar({
       <select
         value={evolutionFilter}
         onChange={(e) => onEvolutionChange(e.target.value)}
-        className="w-full sm:w-1/3 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-sm text-gray-800 "
+        className="w-full md:w-full lg:w-1/3 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-xs sm:text-sm md:text-base text-gray-800"
       >
         {EVOLUTION_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -76,7 +76,7 @@ export default function FilterBar({
       </select>
       <button
         onClick={onReset}
-        className="w-full sm:w-auto px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-sm text-gray-800 "
+        className="w-full md:w-full lg:w-auto px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-xs sm:text-sm md:text-base text-gray-800"
       >
         Reset
       </button>

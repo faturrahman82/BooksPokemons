@@ -7,34 +7,34 @@ export default function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
 
   return (
     <div
-      className="group rounded-xl shadow-xl wi overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl w-96"
+      className="group rounded-xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl w-full max-w-[20rem] sm:max-w-[24rem] md:max-w-[28rem] lg:max-w-[30rem] mx-auto"
       style={{ backgroundColor: bgColor }}
     >
       <div
-        className="text-white text-center py-2"
+        className="text-white text-center py-1.5 sm:py-2 md:py-2.5"
         style={{
-          backgroundColor: darkenColor(bgColor, 0.2), // slightly darker for contrast
+          backgroundColor: darkenColor(bgColor, 0.2), 
         }}
       >
-        <h2 className="text-lg font-bold capitalize">{pokemon.name}</h2>
-        <span className="text-sm">HP {pokemon.hp}</span>
+        <h2 className="text-base sm:text-lg md:text-xl font-bold capitalize">{pokemon.name}</h2>
+        <span className="text-xs sm:text-sm md:text-base">HP {pokemon.hp}</span>
       </div>
 
-      <div className="p-4">
+      <div className="p-3 sm:p-4 md:p-5">
         <Image
           src={pokemon.image}
           alt={pokemon.name}
           width={144}
           height={144}
-          className="mx-auto group-hover:scale-110 transition-transform duration-300 w-36 h-36 object-contain"
+          className="mx-auto group-hover:scale-110 transition-transform duration-300 w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 object-contain"
         />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-2 mb-3">
+      <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 md:gap-3 mb-2 sm:mb-3 md:mb-4">
         {pokemon.types.map((type) => (
           <span
             key={type}
-            className="px-3 py-1 text-xs font-medium rounded-full text-white shadow-sm"
+            className="px-2 py-0.5 sm:px-3 sm:py-1 md:px-4 md:py-1.5 text-xs sm:text-sm md:text-base font-medium rounded-full text-white shadow-sm"
             style={{ backgroundColor: typeColors[type] || "#777" }}
           >
             {type.toUpperCase()}
@@ -42,18 +42,18 @@ export default function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
         ))}
       </div>
 
-      <div className="bg-white bg-opacity-70 px-4 py-2 text-sm text-black">
+      <div className="bg-white bg-opacity-70 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-3 text-xs sm:text-sm md:text-base text-black">
         {pokemon.attacks.map((attack, idx) => (
-          <div key={idx} className="mb-2 bg-white bg-opacity-80 p-2 rounded-md">
+          <div key={idx} className="mb-1.5 sm:mb-2 md:mb-3 bg-white bg-opacity-80 p-1.5 sm:p-2 md:p-3 rounded-md">
             <p className="font-semibold capitalize">{attack.name}</p>
-            <p className="text-xs italic text-gray-600">{attack.description}</p>
-            <p className="text-xs">Damage: {attack.damage}</p>
-            <p className="text-xs capitalize">Category: {attack.category}</p>
+            <p className="text-xs sm:text-sm italic text-gray-600">{attack.description}</p>
+            <p className="text-xs sm:text-sm">Damage: {attack.damage}</p>
+            <p className="text-xs sm:text-sm capitalize">Category: {attack.category}</p>
           </div>
         ))}
       </div>
 
-      <div className="bg-white bg-opacity-70 text-sm text-center px-4 py-2 text-black">
+      <div className="bg-white bg-opacity-70 text-xs sm:text-sm md:text-base text-center px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-3 text-black">
         <p>Stage: {pokemon.evolutionStage}</p>
         <p>Weakness: {pokemon.weakness}</p>
         <p>Resistance: {pokemon.resistance}</p>

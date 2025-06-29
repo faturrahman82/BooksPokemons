@@ -28,14 +28,14 @@ export default function HomePage() {
   const [allData, setAllData] = useState<Pokemon[] | null>(null);
   const [isFullLoading, setIsFullLoading] = useState(true);
 
-  // Fetch all in background once
+  
   useEffect(() => {
     fetchAllPokemonsInBackground()
       .then((res) => setAllData(res))
       .finally(() => setIsFullLoading(false));
   }, []);
 
-  // Use full data for filter, if available
+
   const filteredPokemons = useMemo(() => {
     const source = allData ?? data?.pages.flat() ?? [];
 
