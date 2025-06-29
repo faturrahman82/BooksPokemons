@@ -76,7 +76,7 @@ export default function FilterBar({
       </select>
       <button
         onClick={onReset}
-        className="w-full md:w-full lg:w-auto px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-xs sm:text-sm md:text-base text-gray-800"
+        className="w-full md:w-full lg:w-auto px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-md border border-gray-300  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 shadow-sm transition duration-200 text-xs sm:text-sm md:text-base text-gray-800"
       >
         Reset
       </button>
